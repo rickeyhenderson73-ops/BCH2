@@ -14,7 +14,7 @@ description: >-
     - This variant uses the standard port 5000.
 developer: WillItMod
 website: https://github.com/WillItMod/AxeBench-Release
-support: https://github.com/WillItMod/AxeBench-Release/issues
+support: https://discord.gg/vC2UrFAbUF
 dependencies: []
 port: 5000
 gallery:

@@ -12,7 +12,7 @@ description: >-
     - Axe-style dashboard for node sync, Stratum status, and pool stats
     - SHA256 + Scrypt Stratum ports in one app install
     - SHA256 difficulty presets (vardiff) for small miners through to high-hashrate rigs
-    - Support ticket submission with basic diagnostics
+    - Community support via Discord
 
 
   Miner connection:
@@ -41,7 +41,7 @@ description: >-
 developer: WillItMod
 website: https://github.com/WillItMod/umbrel-dev-community-store
 repo: https://github.com/WillItMod/umbrel-dev-community-store
-support: https://github.com/WillItMod/umbrel-dev-community-store/issues
+support: https://discord.gg/vC2UrFAbUF
 dependencies: []
 port: 21213
 icon: https://raw.githubusercontent.com/WillItMod/umbrel-dev-community-store/main/willitmod-dev-dgb/icon.png

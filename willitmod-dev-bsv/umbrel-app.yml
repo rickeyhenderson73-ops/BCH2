@@ -33,7 +33,7 @@ description: >-
 developer: WillItMod
 website: https://github.com/WillItMod/AxeBSV_Release
 repo: https://github.com/WillItMod/AxeBSV_Release
-support: https://github.com/WillItMod/AxeBSV_Release/issues
+support: https://discord.gg/vC2UrFAbUF
 dependencies: []
 port: 21216
 icon: https://raw.githubusercontent.com/WillItMod/umbrel-dev-community-store/main/willitmod-dev-bsv/icon.png

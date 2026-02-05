@@ -10,7 +10,7 @@ description: >-
   stable fan control, and fleet management.
 developer: WillItMod
 website: https://github.com/WillItMod/AxeLive-Release
-support: https://github.com/WillItMod/AxeLive-Release/issues
+support: https://discord.gg/vC2UrFAbUF
 dependencies: []
 port: 5210
 gallery:

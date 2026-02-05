@@ -13,7 +13,7 @@ description: >-
     - CashAddr to legacy payout address conversion for ckpool compatibility
     - Difficulty presets (vardiff) tuned for home miners
     - Blocks view for solved blocks, plus optional history scan
-    - Support ticket submission with basic diagnostics
+    - Community support via Discord
 
 
   Miner connection:
@@ -43,7 +43,7 @@ description: >-
 developer: WillItMod
 website: https://github.com/WillItMod/AxeXEC
 repo: https://github.com/WillItMod/AxeXEC
-support: https://github.com/WillItMod/AxeXEC/issues
+support: https://discord.gg/vC2UrFAbUF
 dependencies: []
 port: 21218
 icon: https://raw.githubusercontent.com/WillItMod/umbrel-dev-community-store/main/willitmod-dev-xec/icon.png

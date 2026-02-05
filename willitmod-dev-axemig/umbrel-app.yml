@@ -22,7 +22,7 @@ description: >-
 developer: WillItMod
 website: https://github.com/WillItMod/AxeMIG-Release
 repo: https://github.com/WillItMod/umbrel-dev-community-store
-support: https://github.com/WillItMod/AxeMIG-Release/issues
+support: https://discord.gg/vC2UrFAbUF
 dependencies: []
 port: 12150
 icon: "https://raw.githubusercontent.com/WillItMod/umbrel-dev-community-store/main/willitmod-dev-axemig/icon.png"
