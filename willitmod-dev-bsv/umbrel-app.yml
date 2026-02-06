@@ -2,7 +2,7 @@ manifestVersion: 1
 id: willitmod-dev-bsv
 category: bitcoin
 name: AxeBSV
-version: "0.7.176-dev"
+version: "0.7.177-dev"
 tagline: BSV node + solo pool
 description: >-
   THESE APPS ARE IN DEVELOPMENT. THEY MAY WORK, THEY MAY NOT. THESE ARE FOR TESTING ONLY.
