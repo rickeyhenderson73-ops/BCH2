@@ -33,6 +33,32 @@ services:
         mkdir -p /data/node
         chown -R 1000:1000 /data/node || true
 
+  perm_watchdog:
+    image: alpine:3.22.1
+    restart: unless-stopped
+    volumes:
+      - ${APP_DATA_DIR}/data:/data
+    command:
+      - /bin/sh
+      - -ec
+      - |-
+        set -eu
+        # Some hosts/app-update flows can clobber Postgres ownership while the stack is running
+        # (e.g., blanket chown of the app state dir). Watch for it and self-heal.
+        pg_dir="/data/pool/postgres"
+        while true; do
+          if [ -d "$$pg_dir" ]; then
+            uid="$$(stat -c '%u' "$$pg_dir" 2>/dev/null || echo '')"
+            gid="$$(stat -c '%g' "$$pg_dir" 2>/dev/null || echo '')"
+            if [ "$$uid" != "70" ] || [ "$$gid" != "70" ]; then
+              echo "[axedgb] Fixing Postgres datadir ownership (70:70)"
+              chown -R 70:70 "$$pg_dir" 2>/dev/null || true
+              chmod 700 "$$pg_dir" 2>/dev/null || true
+            fi
+          fi
+          sleep 5
+        done
+
   init:
     image: alpine:3.22.1
     depends_on:
