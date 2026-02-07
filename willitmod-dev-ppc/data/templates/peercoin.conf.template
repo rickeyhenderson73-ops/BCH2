@@ -20,4 +20,4 @@ listen=1
 upnp=1
 
 # Pruning (optional): keep only a rolling tail of recent blocks to reduce retained history.
-prune=550
+prune=2000
