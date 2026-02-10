@@ -854,6 +854,9 @@ services:
       MININGCORE_POOL_IDS: "sha256:dgb-sha256-1,scrypt:dgb-scrypt-1"
       STRATUM_PORTS: "sha256:5678,scrypt:5679"
       MININGCORE_CONF_PATH: "/data/pool/config/miningcore.json"
+      # Treat workers as inactive (hashrate=0) after this many seconds with no activity.
+      # (Activity = last accepted share when present, else minerstats snapshot time.)
+      WORKER_ACTIVE_SECONDS: "300"
       APP_CHANNEL: "BETA"
       APP_VERSION_SUFFIX: "-dev"
       DGB_IMAGE: "ghcr.io/willitmod/digibyte:8.26.2"
