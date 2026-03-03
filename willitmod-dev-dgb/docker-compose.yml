@@ -487,11 +487,14 @@ services:
               tmp3="/data/pool/config/miningcore.json.tmp3"
               jq '
                 .[0]
-                | (.pools[]? | select(.id=="dgb-sha256-1" or .id=="dgb-scrypt-1")
-                  | .enabled=true
-                  | .address="D596YFweJQuHY1BbjazZYmAbt8jJPbKehC"
-                  | (.ports |= (if type=="object" then with_entries(.value |= (if type=="object" then (.listenAddress="127.0.0.1") else . end)) else . end))
-                ) | .
+                | (.pools |= (if type=="array" then map(
+                    if type=="object" and (.id=="dgb-sha256-1" or .id=="dgb-scrypt-1") then
+                      (.enabled=true)
+                      | (.address="D596YFweJQuHY1BbjazZYmAbt8jJPbKehC")
+                      | (.ports |= (if type=="object" then with_entries(.value |= (if type=="object" then (.listenAddress="127.0.0.1") else . end)) else . end))
+                    else .
+                    end
+                  ) else . end))
               ' -s /data/pool/config/miningcore.json > "$$tmp3" && mv "$$tmp3" /data/pool/config/miningcore.json
             fi
           fi
@@ -563,11 +566,14 @@ services:
             tmp3="/data/pool/config/miningcore.json.tmp_lock"
             jq '
               .[0]
-              | (.pools[]? | select(.id=="dgb-sha256-1" or .id=="dgb-scrypt-1")
-                | .enabled=true
-                | .address="D596YFweJQuHY1BbjazZYmAbt8jJPbKehC"
-                | (.ports |= (if type=="object" then with_entries(.value |= (if type=="object" then (.listenAddress="127.0.0.1") else . end)) else . end))
-              ) | .
+              | (.pools |= (if type=="array" then map(
+                  if type=="object" and (.id=="dgb-sha256-1" or .id=="dgb-scrypt-1") then
+                    (.enabled=true)
+                    | (.address="D596YFweJQuHY1BbjazZYmAbt8jJPbKehC")
+                    | (.ports |= (if type=="object" then with_entries(.value |= (if type=="object" then (.listenAddress="127.0.0.1") else . end)) else . end))
+                  else .
+                  end
+                ) else . end))
             ' -s "$$miningcore_conf" > "$$tmp3" && mv "$$tmp3" "$$miningcore_conf"
           fi
 
@@ -582,11 +588,14 @@ services:
             tmp_lock="/data/pool/config/miningcore.json.tmp_lock2"
             jq '
               .[0]
-              | (.pools[]? | select(.id=="dgb-sha256-1" or .id=="dgb-scrypt-1")
-                | .enabled=true
-                | .address="D596YFweJQuHY1BbjazZYmAbt8jJPbKehC"
-                | (.ports |= (if type=="object" then with_entries(.value |= (if type=="object" then (.listenAddress="127.0.0.1") else . end)) else . end))
-              ) | .
+              | (.pools |= (if type=="array" then map(
+                  if type=="object" and (.id=="dgb-sha256-1" or .id=="dgb-scrypt-1") then
+                    (.enabled=true)
+                    | (.address="D596YFweJQuHY1BbjazZYmAbt8jJPbKehC")
+                    | (.ports |= (if type=="object" then with_entries(.value |= (if type=="object" then (.listenAddress="127.0.0.1") else . end)) else . end))
+                  else .
+                  end
+                ) else . end))
             ' -s "$$miningcore_conf" > "$$tmp_lock" && mv "$$tmp_lock" "$$miningcore_conf"
             chown -R 1000:1000 /data/pool/config || true
             mc_repaired="1"
@@ -821,7 +830,7 @@ services:
       - ${APP_DATA_DIR}/data/pool/config/coins.json:/app/coins.json:ro
 
   app:
-    image: ghcr.io/willitmod/axedgb-app:0.9.158-dev
+    image: ghcr.io/willitmod/axedgb-app:0.9.159-dev
     user: "1000:1000"
     restart: on-failure
     stop_grace_period: 30s
@@ -857,7 +866,7 @@ services:
       # Treat workers as inactive (hashrate=0) after this many seconds with no activity.
       # (Activity = last accepted share when present, else minerstats snapshot time.)
       WORKER_ACTIVE_SECONDS: "300"
-      APP_CHANNEL: "RC2"
+      APP_CHANNEL: "RC3"
       APP_VERSION_SUFFIX: "-dev"
       DGB_IMAGE: "ghcr.io/willitmod/digibyte:8.26.2"
       MININGCORE_IMAGE: "ghcr.io/willitmod/axedgb-miningcore:axedgb-0.8.10-r24"
