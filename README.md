@@ -6,7 +6,6 @@ Development/test app store for WillItMod apps.
 
 - **Bitcoin** (`willitmod-dev-btc`): BTC full node (Core/Knots) + solo Stratum v1 pool (ckpool) in a single app.
 - **Bitcoin Cash** (`willitmod-dev-bch`): BCH full node (BCHN) + solo Stratum v1 pool (ckpool) in a single app.
-- **Bitcoin SV** (`willitmod-dev-bsv`): BSV full node + solo Stratum v1 pool (ckpool) in a single app (amd64-only).
 - **BitcoinII** (`willitmod-dev-bc2`): BitcoinII (BC2) full node + solo Stratum v1 pool (ckpool) in a single app.
 - **DigiByte** (`willitmod-dev-dgb`): DigiByte Core full node + solo Stratum v1 pool (ckpool) in a single app (experimental).
 - **eCash** (`willitmod-dev-xec`): eCash (XEC) full node + solo Stratum v1 pool (ckpool) in a single app.
