@@ -25,18 +25,12 @@ services:
         chmod 700 /data/postgres || true
 
   app:
-    image: ghcr.io/willitmod/powpow-app:0.2.5-dev
+    image: ghcr.io/willitmod/powpow-app:0.2.6-dev
     user: "1000:1000"
     restart: unless-stopped
     depends_on:
       init_permissions:
         condition: service_completed_successfully
-      litecoin:
-        condition: service_started
-      dogecoin:
-        condition: service_started
-      pool:
-        condition: service_started
     networks:
       default:
         aliases:
@@ -47,14 +41,20 @@ services:
     volumes:
       - ${APP_DATA_DIR}/data:/data
     environment:
-      APP_VERSION: "0.2.5"
+      APP_VERSION: "0.2.6"
       APP_CHANNEL: "DEV"
       NETWORK_HOST_HINT: "${NETWORK_IP}"
       POOL_API_URL: "http://pool:8001"
       POSTGRES_PASSWORD: "${APP_PASSWORD}"
+    healthcheck:
+      test: ["CMD-SHELL", "python -c \"import sys, urllib.request; r=urllib.request.urlopen('http://127.0.0.1:3000/api/about', timeout=3); sys.exit(0 if r.status == 200 else 1)\""]
+      interval: 15s
+      timeout: 5s
+      retries: 20
+      start_period: 90s
 
   litecoin:
-    image: ghcr.io/willitmod/powpow-litecoin:0.2.5-dev
+    image: ghcr.io/willitmod/powpow-litecoin:0.2.6-dev
     restart: unless-stopped
     depends_on:
       init_permissions:
@@ -62,14 +62,14 @@ services:
     volumes:
       - ${APP_DATA_DIR}/data:/data
     healthcheck:
-      test: ["CMD-SHELL", "/opt/litecoin/bin/litecoin-cli -datadir=/data/litecoin getblockchaininfo >/dev/null 2>&1"]
-      interval: 30s
-      timeout: 10s
-      retries: 20
-      start_period: 2m
+      test: ["CMD-SHELL", "pid=$(cat /data/litecoin/litecoind.pid 2>/dev/null || true); [ -n \"$pid\" ] && kill -0 \"$pid\" 2>/dev/null"]
+      interval: 15s
+      timeout: 5s
+      retries: 40
+      start_period: 3m
 
   dogecoin:
-    image: ghcr.io/willitmod/powpow-dogecoin:0.2.5-dev
+    image: ghcr.io/willitmod/powpow-dogecoin:0.2.6-dev
     restart: unless-stopped
     depends_on:
       init_permissions:
@@ -77,14 +77,14 @@ services:
     volumes:
       - ${APP_DATA_DIR}/data:/data
     healthcheck:
-      test: ["CMD-SHELL", "/opt/dogecoin/bin/dogecoin-cli -datadir=/data/dogecoin getblockchaininfo >/dev/null 2>&1"]
-      interval: 30s
-      timeout: 10s
-      retries: 20
-      start_period: 2m
+      test: ["CMD-SHELL", "pid=$(cat /data/dogecoin/dogecoind.pid 2>/dev/null || true); [ -n \"$pid\" ] && kill -0 \"$pid\" 2>/dev/null"]
+      interval: 15s
+      timeout: 5s
+      retries: 40
+      start_period: 3m
 
   pool:
-    image: ghcr.io/willitmod/powpow-pool:0.2.5-dev
+    image: ghcr.io/willitmod/powpow-pool:0.2.6-dev
     restart: unless-stopped
     depends_on:
       init_permissions:
