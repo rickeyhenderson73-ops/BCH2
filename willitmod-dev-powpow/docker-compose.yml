@@ -25,13 +25,11 @@ services:
         chmod 700 /data/postgres || true
 
   app:
-    image: ghcr.io/willitmod/powpow-app:0.2.8-dev
+    image: ghcr.io/willitmod/powpow-app:0.2.9-dev
     user: "1000:1000"
     restart: unless-stopped
     depends_on:
       init_permissions:
-        condition: service_completed_successfully
-      schema_bootstrap:
         condition: service_completed_successfully
     networks:
       default:
@@ -43,7 +41,7 @@ services:
     volumes:
       - ${APP_DATA_DIR}/data:/data
     environment:
-      APP_VERSION: "0.2.8"
+      APP_VERSION: "0.2.9"
       APP_CHANNEL: "DEV"
       NETWORK_HOST_HINT: "${NETWORK_IP}"
       POOL_API_URL: "http://pool:8001"
@@ -56,7 +54,7 @@ services:
       start_period: 90s
 
   litecoin:
-    image: ghcr.io/willitmod/powpow-litecoin:0.2.8-dev
+    image: ghcr.io/willitmod/powpow-litecoin:0.2.9-dev
     restart: unless-stopped
     depends_on:
       init_permissions:
@@ -64,14 +62,14 @@ services:
     volumes:
       - ${APP_DATA_DIR}/data:/data
     healthcheck:
-      test: ["CMD-SHELL", "pid=$(cat /data/litecoin/litecoind.pid 2>/dev/null || true); [ -n \"$pid\" ] && kill -0 \"$pid\" 2>/dev/null"]
+      test: ["CMD-SHELL", "pid=$$(cat /data/litecoin/litecoind.pid 2>/dev/null || true); [ -n \"$$pid\" ] && kill -0 \"$$pid\" 2>/dev/null"]
       interval: 15s
       timeout: 5s
       retries: 40
       start_period: 3m
 
   dogecoin:
-    image: ghcr.io/willitmod/powpow-dogecoin:0.2.8-dev
+    image: ghcr.io/willitmod/powpow-dogecoin:0.2.9-dev
     restart: unless-stopped
     depends_on:
       init_permissions:
@@ -79,22 +77,20 @@ services:
     volumes:
       - ${APP_DATA_DIR}/data:/data
     healthcheck:
-      test: ["CMD-SHELL", "pid=$(cat /data/dogecoin/dogecoind.pid 2>/dev/null || true); [ -n \"$pid\" ] && kill -0 \"$pid\" 2>/dev/null"]
+      test: ["CMD-SHELL", "pid=$$(cat /data/dogecoin/dogecoind.pid 2>/dev/null || true); [ -n \"$$pid\" ] && kill -0 \"$$pid\" 2>/dev/null"]
       interval: 15s
       timeout: 5s
       retries: 40
       start_period: 3m
 
   pool:
-    image: ghcr.io/willitmod/powpow-pool:0.2.8-dev
+    image: ghcr.io/willitmod/powpow-pool:0.2.9-dev
     restart: unless-stopped
     depends_on:
       init_permissions:
         condition: service_completed_successfully
       postgres:
         condition: service_started
-      schema_bootstrap:
-        condition: service_completed_successfully
       litecoin:
         condition: service_started
       dogecoin:
@@ -105,27 +101,6 @@ services:
       - "9555:9555/tcp"
     volumes:
       - ${APP_DATA_DIR}/data:/data
-
-  schema_bootstrap:
-    image: postgres:16-alpine
-    restart: "no"
-    depends_on:
-      init_permissions:
-        condition: service_completed_successfully
-      postgres:
-        condition: service_started
-    environment:
-      PGPASSWORD: "${APP_PASSWORD}"
-    command:
-      - /bin/sh
-      - -ec
-      - |-
-        until pg_isready -h postgres -p 5432 -U mergedmining -d mergedmining; do
-          sleep 2
-        done
-        psql -v ON_ERROR_STOP=1 -h postgres -p 5432 -U mergedmining -d mergedmining -f /bootstrap/10-schema-bootstrap.sql
-    volumes:
-      - ./postgres/bootstrap:/bootstrap:ro
 
   postgres:
     image: postgres:16-alpine
